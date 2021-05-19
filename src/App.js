@@ -45,6 +45,16 @@ const handleEdit=()=>{
 
 }
 
+const handleMultiple=()=>{
+    let newArr=todos.filter((val)=>{
+        if(!val.selected){
+          return val
+        }
+    })
+    console.log(newArr);
+     setTodos(newArr)
+     setMultiple(false)
+}
 
   return (
     <div className="app">
@@ -92,6 +102,7 @@ const handleEdit=()=>{
 
                     if(multiple.length>1){
                       setMultiple(true)
+                   
                     }
                     else{
                       setMultiple(false)
@@ -134,7 +145,7 @@ const handleEdit=()=>{
         })}
       </div>
        {
-        multiple?<i className="far fa-trash-alt"
+        multiple?<i onClick={handleMultiple}className="far fa-trash-alt"
         >Delete Selected</i>:null
       }
      
