@@ -54,6 +54,17 @@ function App() {
     setMultiple(false);
   };
 
+  const handleDate = (todo) => {
+    var d = new Date(todo.id);
+
+    // Swal.fire(d.toString());
+    Swal.fire({
+      title: "<i>Todo Info</i>",
+      html: " Todo Name:" + todo.text + "<br> Date added: " + d.toString(),
+      confirmButtonText: "OK",
+    });
+  };
+
   return (
     <div className="app">
       <div className="mainHeading">
@@ -112,6 +123,10 @@ function App() {
                 <p>{todo.text}</p>
               </div>
               <div className="right">
+                <i
+                  onClick={() => handleDate(todo)}
+                  class="fas fa-calendar-week"
+                ></i>{" "}
                 <i
                   onClick={() => {
                     setTodo(todo.text);
