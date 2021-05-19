@@ -55,12 +55,21 @@ function App() {
   };
 
   const handleDate = (todo) => {
-    var d = new Date(todo.id);
+    // var d = new Date(todo.id);
+
+    const currentDate = new Date(todo.id);
+
+const currentDayOfMonth = currentDate.getDate();
+const currentMonth = currentDate.getMonth(); // Be careful! January is 0, not 1
+const currentYear = currentDate.getFullYear();
+
+const dateString = currentDayOfMonth + "-" + (currentMonth + 1) + "-" + currentYear;
+// "27-11-2020"
 
     // Swal.fire(d.toString());
     Swal.fire({
       title: "<i>Todo Info</i>",
-      html: " Todo Name:" + todo.text + "<br> Date added: " + d.toString(),
+      html: " Todo Name:" + todo.text + "<br> Date added: " + dateString+"<br>Time added: "+currentDate.getHours()+":"+currentDate.getMinutes()+" PM",
       confirmButtonText: "OK",
     });
   };
