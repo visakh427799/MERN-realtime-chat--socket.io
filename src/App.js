@@ -1,174 +1,32 @@
-import "./App.css";
-import Swal from "sweetalert2";
-import { useState } from "react";
-
+import React from 'react'
+import {BrowserRouter as Router,Route} from 'react-router-dom'
+import Join from './components/Join/Join';
+import Chat from './components/Chat';
+ import {UserContext}  from './context/UserContext';
 function App() {
-  const [todos, setTodos] = useState([]);
-  const [todo, setTodo] = useState("✏️ Add item... ");
-  const [multiple, setMultiple] = useState(false);
-  const [edit, setEdit] = useState({
-    id: "",
-    status: false,
-  });
-  const handleChange = (e) => {
-    setTodo(e.target.value);
-  };
 
-  const handleSubmit = () => {
-    if (todo !== "" && todo !== "✏️ Add item...") {
-      setTodos([...todos, { id: Date.now(), text: todo, selected: false }]);
-      setTodo("");
-    } else {
-      Swal.fire({
-        position: "top-end",
-        icon: "error",
-        title: "Please provide an input",
-        showConfirmButton: false,
-        timer: 1500,
-      });
-    }
-  };
+        const [name, setName] = React.useState('');
+        const [room, setRoom] = React.useState('');
 
-  const handleEdit = () => {
-    let id = edit.id;
-    let newTodos = todos.filter((todo2) => {
-      if (todo2.id === id) {
-        todo2.text = todo;
-      }
-      return todo2;
-    });
+    return (
+        
 
-    setTodos(newTodos);
-    setEdit({ id: "", status: false });
-    setTodo("");
-  };
+        <Router>
+         
+                <Route path="/" exact>
+                    <Join setName={setName} setRoom={setRoom}/>
+                </Route>
+                <Route path="/chat" >
 
-  const handleMultiple = () => {
-    let newArr = todos.filter((val) => {
-      if (!val.selected) {
-        return val;
-      }
-    });
-    console.log(newArr);
-    setTodos(newArr);
-    setMultiple(false);
-  };
+                <UserContext.Provider value={{nm:name,rm:room}}>
+                    <Chat/>
+                </UserContext.Provider>  
+                </Route>
 
-  const handleDate = (todo) => {
-    // var d = new Date(todo.id);
+         
 
-    const currentDate = new Date(todo.id);
-
-const currentDayOfMonth = currentDate.getDate();
-const currentMonth = currentDate.getMonth(); // Be careful! January is 0, not 1
-const currentYear = currentDate.getFullYear();
-
-const dateString = currentDayOfMonth + "-" + (currentMonth + 1) + "-" + currentYear;
-// "27-11-2020"
-
-    // Swal.fire(d.toString());
-    Swal.fire({
-      title: "<i>Todo Info</i>",
-      html: " Todo Name:" + todo.text + "<br> Date added: " + dateString+"<br>Time added: "+currentDate.getHours()+":"+currentDate.getMinutes()+" PM",
-      confirmButtonText: "OK",
-    });
-  };
-
-  return (
-    <div className="app">
-      <div className="mainHeading">
-        <h1>ToDo List</h1>
-      </div>
-      <div className="subHeading">
-        <br />
-        {/* <h2>Whoop, it's Wednesday 🌝 ☕ </h2> */}
-      </div>
-      <div className="input">
-        <input
-          onChange={handleChange}
-          type="text"
-          value={todo}
-          placeholder="✏️ Add item... "
-        />
-
-        {edit.status ? (
-          <i onClick={handleEdit} class="far fa-save"></i>
-        ) : (
-          <i onClick={handleSubmit} className="fas fa-plus-circle"></i>
-        )}
-      </div>
-      <div className="todos">
-        {todos.map((todo, key) => {
-          return (
-            <div className="todo">
-              <div className="left">
-                <input
-                  value={todo.selected}
-                  onClick={(e) => {
-                    let newTodos = todos.filter((todo2) => {
-                      if (todo2.id === todo.id) {
-                        todo2.selected = e.target.checked;
-                      }
-                      return todo2;
-                    });
-
-                    setTodos(newTodos);
-                    console.log(newTodos);
-
-                    let multiple = todos.filter((item) => {
-                      if (item.selected) return item;
-                    });
-
-                    if (multiple.length > 1) {
-                      setMultiple(true);
-                    } else {
-                      setMultiple(false);
-                    }
-                  }}
-                  type="checkbox"
-                  name=""
-                  id=""
-                />
-                <p>{todo.text}</p>
-              </div>
-              <div className="right">
-                <i
-                  onClick={() => handleDate(todo)}
-                  class="fas fa-calendar-week"
-                ></i>{" "}
-                <i
-                  onClick={() => {
-                    setTodo(todo.text);
-                    setEdit({ id: todo.id, status: true });
-                  }}
-                  class="far fa-edit"
-                ></i>{" "}
-                <i
-                  onClick={(e) => {
-                    let newTodos = todos.filter((todo2) => {
-                      if (todo2 !== todo) {
-                        return todo2;
-                      } else {
-                        return null;
-                      }
-                    });
-
-                    setTodos(newTodos);
-                  }}
-                  className="far fa-trash-alt"
-                ></i>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-      {multiple ? (
-        <i onClick={handleMultiple} className="far fa-trash-alt">
-          Delete Selected
-        </i>
-      ) : null}
-    </div>
-  );
+        </Router>
+    )
 }
 
-export default App;
+export default App
